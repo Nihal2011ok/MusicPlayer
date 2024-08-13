@@ -5,21 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Player</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body>
     <div class="music-player">
-        <img src="images/default-album-art.jpg" alt="Album Art" id="album-art">
-        <div class="song-details">
-            <h2 id="song-title">Song Title</h2>
-            <p id="artist">Artist</p>
+        <div class="player-main">
+            <img src="images/default-album-art.jpg" alt="Album Art" id="album-art">
+            <div class="song-details">
+                <h2 id="song-title">Song Title</h2>
+                <p id="artist">Artist</p>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="time-display">
+                    <span id="current-time">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+            </div>
+            <div class="controls">
+                <button id="shuffle-btn"><i class="fas fa-random"></i></button>
+                <button id="prev-btn"><i class="fas fa-step-backward"></i></button>
+                <button id="play-btn"><i class="fas fa-play"></i></button>
+                <button id="next-btn"><i class="fas fa-step-forward"></i></button>
+                <button id="repeat-btn"><i class="fas fa-redo"></i></button>
+            </div>
+            <div class="volume-control">
+                <i class="fas fa-volume-down"></i>
+                <input type="range" id="volume-slider" min="0" max="100" value="100">
+                <i class="fas fa-volume-up"></i>
+            </div>
         </div>
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
-        <div class="controls">
-            <button id="prev-btn">Previous</button>
-            <button id="play-btn">Play</button>
-            <button id="next-btn">Next</button>
+        <div class="playlist">
+            <h3>Playlist</h3>
+            <ul id="playlist-items"></ul>
         </div>
     </div>
     <script src="script.js"></script>
