@@ -9,37 +9,54 @@
 </head>
 <body>
     <div class="music-player">
-        <div class="player-main">
-            <img src="images/default-album-art.jpg" alt="Album Art" id="album-art">
-            <div class="song-details">
-                <h2 id="song-title">Song Title</h2>
-                <p id="artist">Artist</p>
-            </div>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress"></div>
-                </div>
-                <div class="time-display">
-                    <span id="current-time">0:00</span>
-                    <span id="duration">0:00</span>
-                </div>
-            </div>
-            <div class="controls">
-                <button id="shuffle-btn"><i class="fas fa-random"></i></button>
-                <button id="prev-btn"><i class="fas fa-step-backward"></i></button>
-                <button id="play-btn"><i class="fas fa-play"></i></button>
-                <button id="next-btn"><i class="fas fa-step-forward"></i></button>
-                <button id="repeat-btn"><i class="fas fa-redo"></i></button>
-            </div>
-            <div class="volume-control">
-                <i class="fas fa-volume-down"></i>
-                <input type="range" id="volume-slider" min="0" max="100" value="100">
-                <i class="fas fa-volume-up"></i>
-            </div>
+        <div class="player-header">
+            <button id="dark-mode-toggle"><i class="fas fa-moon"></i></button>
+            <h1>Music Player</h1>
         </div>
-        <div class="playlist">
-            <h3>Playlist</h3>
-            <ul id="playlist-items"></ul>
+        <div class="player-main">
+            <div class="left-panel">
+                <img src="images/default-album-art.jpg" alt="Album Art" id="album-art">
+                <canvas id="visualizer"></canvas>
+                <div class="song-details">
+                    <h2 id="song-title">Song Title</h2>
+                    <p id="artist">Artist</p>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="time-display">
+                        <span id="current-time">0:00</span>
+                        <span id="duration">0:00</span>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button id="shuffle-btn"><i class="fas fa-random"></i></button>
+                    <button id="prev-btn"><i class="fas fa-step-backward"></i></button>
+                    <button id="play-btn"><i class="fas fa-play"></i></button>
+                    <button id="next-btn"><i class="fas fa-step-forward"></i></button>
+                    <button id="repeat-btn"><i class="fas fa-redo"></i></button>
+                </div>
+                <div class="volume-control">
+                    <i class="fas fa-volume-down"></i>
+                    <input type="range" id="volume-slider" min="0" max="100" value="100">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+            </div>
+            <div class="right-panel">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="playlist">Playlist</button>
+                    <button class="tab-btn" data-tab="lyrics">Lyrics</button>
+                </div>
+                <div class="tab-content">
+                    <div id="playlist" class="tab-pane active">
+                        <ul id="playlist-items"></ul>
+                    </div>
+                    <div id="lyrics" class="tab-pane">
+                        <div id="lyrics-content"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>

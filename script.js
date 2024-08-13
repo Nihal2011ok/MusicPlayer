@@ -11,6 +11,9 @@ const currentTimeEl = document.getElementById('current-time');
 const durationEl = document.getElementById('duration');
 const volumeSlider = document.getElementById('volume-slider');
 const playlistItems = document.getElementById('playlist-items');
+const lyricsContent = document.getElementById('lyrics-content');
+const visualizer = document.getElementById('visualizer');
+const darkModeToggle = document.getElementById('dark-mode-toggle');
 
 const audioPlayer = new Audio();
 let isPlaying = false;
@@ -19,9 +22,9 @@ let isShuffled = false;
 let isRepeating = false;
 
 const playlist = [
-    { title: 'Song 1', artist: 'Artist 1', file: 'songs/song1.mp3', albumArt: 'images/album1.jpg' },
-    { title: 'Song 2', artist: 'Artist 2', file: 'songs/song2.mp3', albumArt: 'images/album2.jpg' },
-    { title: 'Song 3', artist: 'Artist 3', file: 'songs/song3.mp3', albumArt: 'images/album3.jpg' },
+    { title: 'Song 1', artist: 'Artist 1', file: 'songs/song1.mp3', albumArt: 'images/album1.jpg', lyrics: 'Lyrics for Song 1...' },
+    { title: 'Song 2', artist: 'Artist 2', file: 'songs/song2.mp3', albumArt: 'images/album2.jpg', lyrics: 'Lyrics for Song 2...' },
+    { title: 'Song 3', artist: 'Artist 3', file: 'songs/song3.mp3', albumArt: 'images/album3.jpg', lyrics: 'Lyrics for Song 3...' },
 ];
 
 function loadSong(index) {
@@ -30,6 +33,7 @@ function loadSong(index) {
     albumArt.src = song.albumArt;
     songTitle.textContent = song.title;
     artist.textContent = song.artist;
+    lyricsContent.textContent = song.lyrics;
     updatePlaylistHighlight();
 }
 
@@ -133,7 +137,7 @@ volumeSlider.addEventListener('input', (e) => {
     audioPlayer.volume = e.target.value / 100;
 });
 
-
+// Populate playlist
 playlist.forEach((song, index) => {
     const li = document.createElement('li');
     li.textContent = `${song.title} - ${song.artist}`;
@@ -145,5 +149,61 @@ playlist.forEach((song, index) => {
     playlistItems.appendChild(li);
 });
 
+// Tabs functionality
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabPanes = document.querySelectorAll('.tab-pane');
 
+tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabPanes.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+});
+
+// Visualizer
+const ctx = visualizer.getContext('2d');
+let audioContext, analyser, source, dataArray;
+
+function setupVisualizer() {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    source = audioContext.createMediaElementSource(audioPlayer);
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+}
+
+function drawVisualizer() {
+    requestAnimationFrame(drawVisualizer);
+    analyser.getByteFrequencyData(dataArray);
+    ctx.fillStyle = 'rgb(0, 0, 0)';
+    ctx.fillRect(0, 0, visualizer.width, visualizer.height);
+    const barWidth = (visualizer.width / dataArray.length) * 2.5;
+    let x = 0;
+    for (let i = 0; i < dataArray.length; i++) {
+        const barHeight = dataArray[i] / 2;
+        ctx.fillStyle = `rgb(${barHeight + 100}, 50, 50)`;
+        ctx.fillRect(x, visualizer.height - barHeight, barWidth, barHeight);
+              x += barWidth + 1;
+    }
+}
+
+// Initialize Visualizer
+setupVisualizer();
+drawVisualizer();
+
+// Dark Mode Toggle
+darkModeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    darkModeToggle.classList.toggle('active');
+});
+
+// Initial Load
 loadSong(currentSongIndex);
+audioPlayer.volume = volumeSlider.value / 100;
+
+     
